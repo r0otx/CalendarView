@@ -24,6 +24,26 @@ public extension CalendarConfig {
     /// Sets the first day of the week.
     /// DEFAULT:: Monday
     func firstWeekday(_ value: MWeekday) -> Self { MCalendar.firstWeekday = value; return self }
+    
+    /// Sets the first day of the week based on the country Code
+    /// DEFAULT:: US
+    func firstWeekday(for countryCode: String = "US") -> Self {
+        let weekday = WeekdayRule.firstWeekday(for: countryCode)
+        return firstWeekday(weekday)
+    }
+    
+    /// Sets the first day of the week based on the device locale
+    /// DEFAULT:: Current
+    func firstWeekday(for locale: Locale = Locale.current) -> Self {
+        var countryCode: String
+        
+        if #available(iOS 16, *) {
+            countryCode = locale.region?.identifier ?? "US"
+        } else {
+            countryCode = locale.identifier
+        }
+        return firstWeekday(for: countryCode)
+    }
 
     /// Sets the locale of the calendar.
     /// DEFAULT: AutoupdatingCurrent
