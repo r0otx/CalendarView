@@ -62,8 +62,10 @@ private extension DayView {
 }
 private extension DayView {
     var rangeSelectionViewCorners: RoundedRectangle.Corner { 
-        if isBeginningOfRange() { return [.topLeft, .bottomLeft] }
-        if isEndOfRange() { return [.topRight, .bottomRight] }
+        if isBeginningOfRange() && isInterfaceLTR() { return [.topLeft, .bottomLeft] }
+        if isEndOfRange() && isInterfaceLTR() { return [.topRight, .bottomRight] }
+        if isBeginningOfRange() && !isInterfaceLTR() { return [.topRight, .bottomRight] }
+        if isEndOfRange() && !isInterfaceLTR() { return [.topLeft, .bottomLeft] }
 
         return []
     }
@@ -99,6 +101,7 @@ public extension DayView {
     func isBeginningOfRange() -> Bool { date.isSame(.day, as: selectedRange?.wrappedValue?.getRange()?.lowerBound) }
     func isEndOfRange() -> Bool { date.isSame(.day, as: selectedRange?.wrappedValue?.getRange()?.upperBound) }
     func isWithinRange() -> Bool { selectedRange?.wrappedValue?.isRangeCompleted() == true && selectedRange?.wrappedValue?.contains(date) == true }
+    func isInterfaceLTR() -> Bool { UIApplication.shared.userInterfaceLayoutDirection == .leftToRight }
 }
 
 // MARK: - Others
