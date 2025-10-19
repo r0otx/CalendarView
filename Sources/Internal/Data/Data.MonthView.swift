@@ -26,7 +26,7 @@ extension [Data.MonthView] {
 }
 private extension [Data.MonthView] {
     static func createDatesRange() -> ClosedRange<Int> { let startDate = MCalendar.startDate, endDate = MCalendar.endDate
-        guard startDate <= endDate else { fatalError("Start date must be lower than end date") }
+        guard startDate >= endDate else { fatalError("Start date must be lower than end date") }
 
         let numberOfMonthsBetweenDates = startDate.distance(to: endDate, in: .month)
         return 0...Swift.min(numberOfMonthsBetweenDates, 12 * 10)
