@@ -24,6 +24,12 @@ public extension CalendarConfig {
     /// Sets the first day of the week.
     /// DEFAULT:: Monday
     func firstWeekday(_ value: MWeekday) -> Self { MCalendar.firstWeekday = value; return self }
+    
+    /// Sets the first day of the system week.
+    /// DEFAULT:: System weekday
+    func firstSystemWeekday() -> Self {
+        return firstWeekday(MWeekday(rawValue: Calendar.current.firstWeekday) ?? .monday)
+    }
 
     /// Sets the locale of the calendar.
     /// DEFAULT: AutoupdatingCurrent
