@@ -22,18 +22,41 @@ extension [Data.MonthView] {
         createDatesRange()
             .map(createMonthDate)
             .map(createMonthViewData)
+            .reversed()
     }
 }
+
 private extension [Data.MonthView] {
-    static func createDatesRange() -> ClosedRange<Int> { let startDate = MCalendar.startDate, endDate = MCalendar.endDate
+    static func createDatesRange() -> ClosedRange<Int> {
+        let startDate = MCalendar.startDate, endDate = MCalendar.endDate
         guard startDate <= endDate else { fatalError("Start date must be lower than end date") }
 
         let numberOfMonthsBetweenDates = startDate.distance(to: endDate, in: .month)
         return 0...Swift.min(numberOfMonthsBetweenDates, 12 * 10)
     }
-    static func createMonthDate(_ index: Int) -> Date { MCalendar.startDate.adding(index, .month) }
-    static func createMonthViewData(_ monthStart: Date) -> Data.MonthView { .generate(monthStart) }
+
+    static func createMonthDate(_ index: Int) -> Date {
+        // Вычисляем дату от endDate назад
+        let totalMonths = MCalendar.startDate.distance(to: MCalendar.endDate, in: .month)
+        let reversedIndex = totalMonths - index // Переворачиваем индекс
+        return MCalendar.endDate.adding(-reversedIndex, .month)
+    }
+
+    static func createMonthViewData(_ monthStart: Date) -> Data.MonthView {
+        .generate(monthStart)
+    }
 }
+
+//private extension [Data.MonthView] {
+//    static func createDatesRange() -> ClosedRange<Int> { let startDate = MCalendar.startDate, endDate = MCalendar.endDate
+//        guard startDate <= endDate else { fatalError("Start date must be lower than end date") }
+//
+//        let numberOfMonthsBetweenDates = startDate.distance(to: endDate, in: .month)
+//        return 0...Swift.min(numberOfMonthsBetweenDates, 12 * 10)
+//    }
+//    static func createMonthDate(_ index: Int) -> Date { MCalendar.startDate.adding(index, .month) }
+//    static func createMonthViewData(_ monthStart: Date) -> Data.MonthView { .generate(monthStart) }
+//}
 
 // MARK: - Generating Single Month
 private extension Data.MonthView {
